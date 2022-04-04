@@ -2,11 +2,11 @@ trigger:
 - master
 
 pool:
-  name: 'Default'
+  vmImage: ubuntu-latest
 
 stages:
-- stage: preparation
-  displayName: Preparation
+- stage: Download Source from ISPW Container
+  displayName: Download
   jobs:
   - job: getAssets
     displayName: Get Assets from Mainframe and GitHub
