@@ -4,7 +4,14 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-  steps:
+stages:
+- stage: preparation
+  displayName: Preparation
+  jobs:
+  - job: getAssets
+    displayName: Get Assets from Mainframe and GitHub
+    steps:
+steps:
     - task: CmdLine@2
       displayName: Download Mainframe Code
       inputs:
