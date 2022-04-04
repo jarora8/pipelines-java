@@ -5,34 +5,53 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
+    - task: downloadertask@0
+      inputs:
+        host: 'cw09.compuware.com'
+        port: '47623'
+        codePage: '1047'
+        windowsTopazWorkbenchCliHome: 'C:\Jalaj\TopazISPW\InstalledApplication\Topaz\TopazWorkbenchCLI'
+        windowsSourceDownloadLocation: 'C:\Jalaj\TopazISPW\AzureTest'
+        containerType: 'Assignment'
+        containerId: 'KATE012376'
+        runtimeConfig: 'tpzp'
+        componentType: 'cob'
+        level: 'dev1'
+        downloadIncludes: 'false'
+        downloadUnchangedSource: 'false'
+    
     - task: CmdLine@2
       displayName: Download Mainframe Code
       inputs:
         script: |
           CD $(workspaceRoot)
           echo Downloading Mainframe Code using Parameters
-          echo Host IP     : $(hostUri)
-          echo Port        : $(hostPort)
-          echo User ID     : $(hostUser)
-          echo Codepage    : $(hostCodePage)
-          echo ISPW Config : $(ispwConfig)
-          echo Container   : $(ispwContainerName)
-          echo Type        : $(ispwContainerType)
-          echo Level       : $(ispwTargetLevel)
+          echo Host IP     : $(host)
+          echo Port        : $(port)
+          echo Code Page     : $(codePage)
+          echo CLI Home    : $(windowsTopazWorkbenchCliHome)
+          echo Source Download Location    : $(windowsSourceDownloadLocation)
+          echo Runtime Configuration : $(runtimeConfig)
+          echo Container Type        : $(containerType)
+          echo Component Type        : $(componentType)
+          echo Container Id   : $(containerId)
+          echo Level       : $(level)
+          echo Download Includes       : $(downloadIncludes)
+          echo Download Source       : $(downloadUnchangedSource)
           
           $(cliPath)\SCMDownloaderCLI.bat ^
-            -host $(hostUri) ^
-            -port $(hostPort) ^
-            -id $(hostUser) ^
-            -pass $(hostPassword) ^
+            -host $(host) ^
+            -port $(port) ^
+            -id $(PINJXA0) ^
+            -pass $(Aror@321) ^
             -protocol None ^
-            -code $(hostCodePage) ^
+            -code $(codePage) ^
             -timeout 0 ^
-            -targetFolder .\ ^
-            -data $(topazCliWorkspace) ^
-            -ispwServerConfig $(ispwConfig) ^
+            -targetFolder $(windowsSourceDownloadLocation) ^
+            -data $(windowsSourceDownloadLocation) ^
+            -ispwServerConfig $(runtimeConfig) ^
             -scm ispwc ^
-            -ispwContainerName $(ispwContainerName) ^
-            -ispwContainerType $(ispwContainerType) ^
-            -ispwServerLevel $(ispwTargetLevel) ^
+            -ispwContainerName $(containerId) ^
+            -ispwContainerType $(containerType) ^
+            -ispwServerLevel $(level) ^
             -ispwDownloadAll true
