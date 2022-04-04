@@ -4,21 +4,6 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-  # Download Mainframe Sources from ISPW Container
-    # The command line execution is equivalent to the following Jenkins Groovy method call
-    # checkout(
-    #   [
-    #     $class:             'IspwContainerConfiguration', 
-    #     connectionId:       "${pipelineParams.hciConnectionId}",
-    #     credentialsId:      "${pipelineParams.hciToken}", 
-    #     componentType:      '', 
-    #     containerName:      pipelineParams.ispwAssignment, 
-    #     containerType:      '0', // 0 Assignment, 1 Release, 2 Set, 
-    #     ispwDownloadAll:    false, 
-    #     ispwDownloadIncl:   true, 
-    #     serverConfig:       '', 
-    #     serverLevel:        ispwTargetLevel
-    #   ]
   steps:
     - task: CmdLine@2
       displayName: Download Mainframe Code
