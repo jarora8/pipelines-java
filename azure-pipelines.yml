@@ -5,7 +5,7 @@ pool:
   vmImage: ubuntu-latest
 
 stages:
-- stage: Download Source from ISPW Container
+- stage: Download
   displayName: Download
   jobs:
   - job: getAssets
