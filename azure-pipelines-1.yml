@@ -1,22 +1,53 @@
-# Maven
-# Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
 trigger:
 - master
 
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.8'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+  # Download Mainframe Sources from ISPW Container
+    # The command line execution is equivalent to the following Jenkins Groovy method call
+    # checkout(
+    #   [
+    #     $class:             'IspwContainerConfiguration', 
+    #     connectionId:       "${pipelineParams.hciConnectionId}",
+    #     credentialsId:      "${pipelineParams.hciToken}", 
+    #     componentType:      '', 
+    #     containerName:      pipelineParams.ispwAssignment, 
+    #     containerType:      '0', // 0 Assignment, 1 Release, 2 Set, 
+    #     ispwDownloadAll:    false, 
+    #     ispwDownloadIncl:   true, 
+    #     serverConfig:       '', 
+    #     serverLevel:        ispwTargetLevel
+    #   ]
+  steps:
+    - task: CmdLine@2
+      displayName: Download Mainframe Code
+      inputs:
+        script: |
+          CD $(workspaceRoot)
+          echo Downloading Mainframe Code using Parameters
+          echo Host IP     : $(hostUri)
+          echo Port        : $(hostPort)
+          echo User ID     : $(hostUser)
+          echo Codepage    : $(hostCodePage)
+          echo ISPW Config : $(ispwConfig)
+          echo Container   : $(ispwContainerName)
+          echo Type        : $(ispwContainerType)
+          echo Level       : $(ispwTargetLevel)
+          
+          $(cliPath)\SCMDownloaderCLI.bat ^
+            -host $(hostUri) ^
+            -port $(hostPort) ^
+            -id $(hostUser) ^
+            -pass $(hostPassword) ^
+            -protocol None ^
+            -code $(hostCodePage) ^
+            -timeout 0 ^
+            -targetFolder .\ ^
+            -data $(topazCliWorkspace) ^
+            -ispwServerConfig $(ispwConfig) ^
+            -scm ispwc ^
+            -ispwContainerName $(ispwContainerName) ^
+            -ispwContainerType $(ispwContainerType) ^
+            -ispwServerLevel $(ispwTargetLevel) ^
+            -ispwDownloadAll true
