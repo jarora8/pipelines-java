@@ -4,39 +4,6 @@ trigger:
 pool:
   name: 'Default'
 
-# Set "runtime" variables
-variables:
-- group: 'mainframe-pipeline-parameters'
-- name: 'gitRepo'
-  value: 'FTSDEMO_$(ispwApplication)_Unit_Tests'
-- name: 'ccSystem'
-  value: 'AZURE_$(ispwContainerName)'
-- name: 'ccDdio'
-  value: 'SALESSUP.$(ispwApplication).$(ispwLevel).LOAD.SSD'
-- name: 'sonarProjectName'
-  value: 'RNU_$(ispwApplication)_Azure'
-- name: 'sonarSources'
-  value: '.\$(ispwApplication)\MF_Source'
-- name: 'tttEnvironment'
-  value: '5b508b8a787be73b59238d38'
-- name: 'testFolderVt'
-  value: 'tests/Virtualized_Tests'
-- name: 'testResultFolderVt'
-  value: './TTTSonar/Virtualized_Tests.cli.suite.sonar.xml'
-- name: 'codeCoverageReportFile'
-  value: 'Coverage/CodeCoverage.xml'
-- name: topazCliWorkspace
-  value: '.\TopazCliWkspc'
-- name: ispwTargetLevel
-  ${{ if eq(variables['ispwLevel'], 'DEV1') }}:
-    value: QA1
-  ${{ elseif eq(variables['ispwLevel'], 'DEV2') }}:
-    value: QA2
-  ${{ else}}:
-    value: QA3
-- name: contextVars
-  value: '"ispw_app=$(ispwApplication),ispw_level=$(ispwTargetLevel)"'
-
 stages:
 - stage: preparation
   displayName: Preparation
